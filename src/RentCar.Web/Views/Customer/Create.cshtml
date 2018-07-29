@@ -1,0 +1,209 @@
+﻿@model RegisterCustomerViewModel
+@{
+    ViewData["Title"] = "Müşteri Kayıt";
+}
+<div class="col-md-12">
+    <h4>Yeni Müşteri Kayıt</h4>
+    <form asp-controller="Customer" asp-action="Create" method="post" role="form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Caption" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Caption" class="form-control" />
+                        <span asp-validation-for="Caption" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="IdentityNumber" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="IdentityNumber" class="form-control" />
+                        <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Birthdate" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Birthdate" type="date" class="form-control" />
+                        <span asp-validation-for="Birthdate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Gender" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.Gender,
+                             Html.GetEnumSelectList<RentCar.Core.Models.Gender>().ToList(), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="TaxNumber" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="TaxNumber" class="form-control" />
+                        <span asp-validation-for="TaxNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="TaxOffice" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="TaxOffice" class="form-control" />
+                        <span asp-validation-for="TaxOffice" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Mobile" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Mobile" class="form-control" />
+                        <span asp-validation-for="Mobile" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="HomePhone" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="HomePhone" class="form-control" />
+                        <span asp-validation-for="HomePhone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="OfficePhone" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="OfficePhone" class="form-control" />
+                        <span asp-validation-for="OfficePhone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="StateId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="StateId" asp-items="Model.States" 
+                                class="form-control" onchange="onChangeOption(this.value)">></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="CityId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group text-right">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            window.onChangeOption = function (value) {
+
+                $.post("@Url.Action("Cities", "Customer")/" + value, function (data) {
+                    var citySelect = $("#CityId");
+                    citySelect.html("");
+                    $.each(data, function (i, v) {
+                        $("<option />", {
+                            "value": v.id,
+                            html: v.name
+                        }).appendTo(citySelect);
+                    });
+                });
+            };
+
+        });
+    </script>
+}

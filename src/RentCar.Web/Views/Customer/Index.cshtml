@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CustomerViewModel>
+@{
+    ViewData["Title"] = "Müşteriler";
+}
+<div class="row">
+    <div class="col-md-12">
+        <h4>Araçlar</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn pull-right">
+                    <a asp-controller="Customer" asp-action="Create" class="btn btn-success">Yeni Müşteri</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="table-responsive">
+                    <table class="table table-bordred table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Unvan</th>
+                                <th>TC No</th>
+                                <th>Doğun Tarihi</th>
+                                <th>Cinsiyet</th>
+                                <th>Vergi No</th>
+                                <th>Vergi Dairesi</th>
+                                <th>Cep Tel</th>
+                                <th>Ev Tel</th>
+                                <th>Office Tel</th>
+                                <th>Adres</th>
+                                <th>Aktiflik</th>
+                                <th>Düzenleme</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
+                                        <td>@item.Caption</td>
+                                        <td>@item.IdentityNumber</td>
+                                        <td>@item.Birthdate.ToString("dd.MM.yyyy")</td>
+                                        <td>@Html.DisplayFor(m => item.Gender)</td>
+                                        <td>@item.TaxNumber</td>
+                                        <td>@item.TaxOffice</td>
+                                        <td>@item.Mobile</td>
+                                        <td>@item.HomePhone</td>
+                                        <td>@item.OfficePhone</td>
+                                        <td>@item.Address - @item.City / @item.State</td>
+                                        <td>
+                                            @(item.IsActive ? "Aktif" : "Pasif")
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Customer" asp-action="Edit" asp-route-Id="@item.Id"
+                                               class="btn btn-info">Düzenle</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

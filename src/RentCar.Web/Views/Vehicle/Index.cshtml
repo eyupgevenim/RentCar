@@ -1,0 +1,57 @@
+﻿@model IEnumerable<VehicleViewModel>
+@{
+    ViewData["Title"] = "Araçlar";
+}
+<div class="col-md-12">
+    <h4>Araçlar</h4>
+
+    <div class="btn pull-right">
+        <a asp-controller="Vehicle" asp-action="Create" class="btn btn-success">Yeni Araç</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordred table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Plaka</th>
+                    <th>Şasi No</th>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Model Yıllı</th>
+                    <th>Tip</th>
+                    <th>Renk</th>
+                    <th>Günlük Ücret</th>
+                    <th>Aktiflik</th>
+                    <th>Düzenleme</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Plate</td>
+                            <td>@item.ChassisNo</td>
+                            <td>@item.Brand</td>
+                            <td>@item.Model</td>
+                            <td>@item.ModelYear</td>
+                            <td>@item.VehicleType</td>
+                            <td>@Html.DisplayFor(m => item.Color)</td>
+                            <td>@item.CurrencyValue @item.Currency.ToString()</td>
+                            <td>
+                                @(item.IsActive ? "Aktif" : "Pasif")
+                            </td>
+                            <td>
+                                <a asp-controller="Vehicle" asp-action="Edit" asp-route-Id="@item.Id" 
+                                   class="btn btn-info">Düzenle</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

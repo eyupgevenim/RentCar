@@ -1,0 +1,106 @@
+﻿@model RegisterBookingViewModel
+@{
+    ViewData["Title"] = "Rezervasyon Kayıt";
+}
+<div class="col-md-12">
+    <h4>Yeni Rezervasyon</h4>
+    <form asp-controller="Booking" asp-action="Create" method="post" role="form">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="CustomerId" class="control-label col-md-2"></label>
+                    <div class="col-md-4 ui-widget">
+                        <input asp-for="CustomerId" type="hidden" />
+                        <input type="text" asp-for="Customer" class="form-control" placeholder="Müşteri Ara"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="VehicleId" class="control-label col-md-2"></label>
+                    <div class="col-md-4 ui-widget">
+                        <input asp-for="VehicleId" type="hidden" />
+                        <input type="text" asp-for="Vehicle" class="form-control" placeholder="Araç Ara"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="StartDate" class="form-control"/>
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group text-right">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+
+            $("#Customer").autocomplete({
+                source: "/Customer/SearchCustomerByName",
+                minLength: 2,
+                select: function (event, ui) {
+                    $("#CustomerId").val(ui.item.id);
+                }
+            });
+
+            $("#Vehicle").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Vehicle/SearchVehicleByBrandName",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    $("#VehicleId").val(ui.item.id);
+                }
+            });
+            
+        });
+    </script>
+}

@@ -1,0 +1,117 @@
+﻿@model ReportViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Report" asp-action="Index" method="post">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ReportType" class="control-label col-md-2"></label>
+                    <div class="col-md-2">
+                        <select asp-for="ReportType"
+                                asp-items="Html.GetEnumSelectList<ReportType>().ToList()"
+                                class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label col-md-2"></label>
+                    <div class="col-md-2">
+                        <input asp-for="StartDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label col-md-2"></label>
+                    <div class="col-md-2">
+                        <input asp-for="EndDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2"></label>
+                <button type="submit" class="btn btn-success">Raporla</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordred table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @if (Model.ReportType == ReportType.Price)
+                            {
+                                @: Toplam Ücret
+                            }
+                            else if (Model.ReportType == ReportType.BookingCount)
+                            {
+                                @: Toplam Rezervasyon
+                            }
+                        </th>
+                        <th>Yüzde</th>
+                        <th>Id</th>
+                        <th>Plaka</th>
+                        <th>Şasi No</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Model Yıllı</th>
+                        <th>Tip</th>
+                        <th>Renk</th>
+                        <th>Günlük Ücret</th>
+                        <th>Aktiflik</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Reports != null && Model.Reports.Any())
+                    {
+                        foreach (var item in Model.Reports)
+                        {
+                            string count = "0";
+                            double percent = 0;
+                            if (Model.ReportType == ReportType.Price)
+                            {
+                                count = item.TotalPrice.ToString("#.00");
+                                percent = (double)(100 * item.TotalPrice) / Model.Reports.Sum(x => x.TotalPrice);
+                            }
+                            else if (Model.ReportType == ReportType.BookingCount)
+                            {
+                                count = item.TotalBookingCount.ToString();
+                                percent = (double)(100 * item.TotalBookingCount) / Model.Reports.Sum(x => x.TotalBookingCount);
+                            }
+                            <tr>
+                                <td>@count</td>
+                                <td>@percent.ToString("#.00")</td>
+                                <td>@item.Vehicle.Id</td>
+                                <td>@item.Vehicle.Plate</td>
+                                <td>@item.Vehicle.ChassisNo</td>
+                                <td>@item.Vehicle.Brand.Name</td>
+                                <td>@item.Vehicle.Model.Name</td>
+                                <td>@item.Vehicle.ModelYear</td>
+                                <td>@item.Vehicle.VehicleType.Name</td>
+                                <td>@Html.DisplayFor(m => item.Vehicle.Color)</td>
+                                <td>@item.Vehicle.CurrencyValue @item.Vehicle.Currency.ToString()</td>
+                                <td>
+                                    @(item.Vehicle.IsActive.Value ? "Aktif" : "Pasif")
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

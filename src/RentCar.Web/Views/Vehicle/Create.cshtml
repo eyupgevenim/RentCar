@@ -1,0 +1,177 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Araç Kayıt";
+}
+<div class="col-md-12">
+    <h4>Yeni Araç Kayıt</h4>
+    <form asp-controller="Vehicle" asp-action="Create" method="post" role="form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Plate" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Plate" class="form-control" />
+                        <span asp-validation-for="Plate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ChassisNo" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="ChassisNo" class="form-control" />
+                        <span asp-validation-for="ChassisNo" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ModelYear" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="ModelYear" class="form-control" />
+                        <span asp-validation-for="ModelYear" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Color" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.Color,
+                             Html.GetEnumSelectList<RentCar.Core.Models.Color>().ToList(), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Marka</label>
+                    <div class="col-md-4">
+                        <select id="BrandId" name="BrandId" class="form-control" onchange="onChangeOption(this.value)"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ModelId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="ModelId" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="TypeId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="TypeId" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="CurrencyValue" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="CurrencyValue" class="form-control" />
+                        <span asp-validation-for="CurrencyValue" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Currency" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.Currency,
+                             Html.GetEnumSelectList<RentCar.Core.Models.Currency>().ToList(), new { @class="form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group text-right">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            var brandSelect = $("#BrandId");
+
+            $.get("@Url.Action("Brands", "Vehicle")", function (data) {
+                ///console.log(data);
+                $.each(data, function (i, v) {
+                    $("<option />", {
+                        "value": v.id,
+                        html: v.name
+                    }).appendTo(brandSelect);
+                });
+
+                var selectedValue = brandSelect.val();
+                onChangeOption(selectedValue);
+            });
+
+            $.get("@Url.Action("VehicleTypes", "Vehicle")", function (data) {
+                //console.log(data);
+                var typeSelect = $("#TypeId");
+                $.each(data, function (i, v) {
+                    $("<option />", {
+                        "value": v.id,
+                        html: v.name
+                    }).appendTo(typeSelect);
+                });
+            });
+
+            window.onChangeOption = function (value) {
+                //console.log(value);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("BrandModels", "Vehicle")/" + value,
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                   // data: JSON.stringify({"id": value }),
+                    success: function (data) {
+                        //console.log(data);
+                        var modelSelect = $("#ModelId");
+                        modelSelect.html("");
+                        $.each(data, function (i, v) {
+                            $("<option />", {
+                                "value": v.id,
+                                html: v.name
+                            }).appendTo(modelSelect);
+                        });
+                    }
+                });
+            };
+        });
+    </script>
+}

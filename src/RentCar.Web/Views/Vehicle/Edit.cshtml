@@ -1,0 +1,161 @@
+﻿@model EditViewModel
+@{
+    ViewData["Title"] = "Araç Düzenleme";
+}
+<div class="col-md-12">
+    <h4>Düzenleme</h4>
+    <form asp-controller="Vehicle" asp-action="Edit" method="post" role="form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Plate" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="Plate" class="form-control" />
+                        <span asp-validation-for="Plate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ChassisNo" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="ChassisNo" class="form-control" />
+                        <span asp-validation-for="ChassisNo" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ModelYear" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="ModelYear" class="form-control" />
+                        <span asp-validation-for="ModelYear" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Color" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.Color,
+                             Html.GetEnumSelectList<RentCar.Core.Models.Color>().ToList(), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="BrandId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="BrandId" asp-items="Model.Brands" class="form-control"
+                                onchange="onChangeOption(this.value)"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ModelId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="ModelId" asp-items="Model.Models" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="TypeId" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <select asp-for="TypeId" asp-items="Model.Types" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="CurrencyValue" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="CurrencyValue" class="form-control" />
+                        <span asp-validation-for="CurrencyValue" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Currency" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.Currency,
+                             Html.GetEnumSelectList<RentCar.Core.Models.Currency>().ToList(), new { @class="form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="IsActive" class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <input asp-for="IsActive" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group text-right">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            window.onChangeOption = function (value) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Vehicle/BrandModels/" + value,
+                    dataType: "json",
+                    success: function (data) {
+                        var modelSelect = $("#ModelId");
+                        modelSelect.html("");
+                        $.each(data, function (i, v) {
+                            $("<option />", {
+                                "value": v.id,
+                                html: v.name
+                            }).appendTo(modelSelect);
+                        });
+                    }
+                });
+            };
+        });
+    </script>
+}

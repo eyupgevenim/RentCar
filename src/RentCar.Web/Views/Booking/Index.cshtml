@@ -1,0 +1,105 @@
+﻿@model IEnumerable<BookingViewModel>
+@{
+    ViewData["Title"] = "Rezervasyonlar";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn pull-right">
+            <a asp-controller="Booking" asp-action="Create" class="btn btn-success">Yeni Rezervasyon</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <h4>Uygun Araçlar</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordred table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Plaka</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Model Yıllı</th>
+                        <th>Tip</th>
+                        <th>Renk</th>
+                        <th>Günlük Ücret</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model.Where(x => x.BookingRemainingTime == null))
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Plate</td>
+                                <td>@item.Brand.Name</td>
+                                <td>@item.Model.Name</td>
+                                <td>@item.ModelYear</td>
+                                <td>@item.VehicleType.Name</td>
+                                <td>@Html.DisplayFor(m => item.Color)</td>
+                                <td>@item.CurrencyValue @item.Currency.ToString()</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <h4>Rezervasyonlu Araçlar</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordred table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Plaka</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Model Yıllı</th>
+                        <th>Tip</th>
+                        <th>Renk</th>
+                        <th>Günlük Ücret</th>
+                        <th>Kalan Süre</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model.Where(x => x.BookingRemainingTime != null))
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Plate</td>
+                                <td>@item.Brand.Name</td>
+                                <td>@item.Model.Name</td>
+                                <td>@item.ModelYear</td>
+                                <td>@item.VehicleType.Name</td>
+                                <td>@Html.DisplayFor(m => item.Color)</td>
+                                <td>@item.CurrencyValue @item.Currency.ToString()</td>
+                                <td>@item.RemainingTimeFormed</td>
+                                <td>
+                                    <a asp-controller="Booking" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-default">Detay</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+

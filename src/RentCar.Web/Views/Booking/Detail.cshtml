@@ -1,0 +1,89 @@
+﻿@model DetailBookingViewModel
+@{
+    ViewData["Title"] = "Detail";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>Araç Bilgileri</h3>
+                <p>Id: @Model.Vehicle.Id</p>
+                <p>Plaka: @Model.Vehicle.Plate</p>
+                <p>Şasi No: @Model.Vehicle.ChassisNo</p>
+                <p>Marka: @Model.Vehicle.Brand.Name</p>
+                <p>Model: @Model.Vehicle.Model.Name</p>
+                <p>Model Yıllı: @Model.Vehicle.ModelYear</p>
+                <p>Tipi: @Model.Vehicle.VehicleType.Name</p>
+                <p>Rengi: @Html.DisplayFor(m => m.Vehicle.Color)</p>
+                <p>Günlük Ücret: @Model.Vehicle.CurrencyValue @Html.DisplayFor(m => m.Vehicle.Currency)</p>
+                <p>@(Model.Vehicle.IsActive.Value ? "Aktif" : "pasif")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var item in Model.Booking)
+{
+
+    <div class="row">
+
+        <div class="panel panel-success" @(item.EndDate.Ticks > DateTime.Now.Ticks ? "style=\"background-color:#3c763d\"" : "")>
+            <div class="panel-body">
+
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <h4>Rezervasyon</h4>
+                            <p>Id: @item.Id</p>
+                            <p>Başlangıç Tarihi: @item.StartDate</p>
+                            <p>Bitiş Tarihi: @item.EndDate</p>
+                            <p>Süre: @item.Duration</p>
+                            <p>Ücret: @item.Price.ToString("#.00") @Html.DisplayFor(m => m.Vehicle.Currency)</p>
+                            <p>@(item.IsCancel ? "İptal Edildi" : "")</p>
+                            @if (item.EndDate > DateTime.Now)
+                            {
+                                <p>
+                                    <a asp-controller="Booking" asp-action="Edit" asp-route-id="@item.Id"
+                                       class="btn btn-default">Düzenle</a>
+                                </p>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <h3>Müşteri</h3>
+                            <p>Ad: @item.Customer.FirstName</p>
+                            <p>Soyad: @item.Customer.LastName</p>
+                            <p>TC No: @item.Customer.IdentityNumber</p>
+                            <p>Cep Tel: @item.Customer.Mobile</p>
+                            <p>Ev Tel: @item.Customer.HomePhone</p>
+                            <p>Office Tel: @item.Customer.OfficePhone</p>
+                            <p>Vergi No: @item.Customer.TaxNumber</p>
+                            <p>Vergi Dairesi: @item.Customer.TaxOffice</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <h3>Kullanıcı</h3>
+                            <p>Ad: @item.User.FirstName</p>
+                            <p>Soyad: @item.User.LastName</p>
+                            <p>Email: @item.User.Email</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+}
+
